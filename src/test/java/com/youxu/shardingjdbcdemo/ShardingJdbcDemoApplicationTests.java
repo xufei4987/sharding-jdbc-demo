@@ -2,8 +2,10 @@ package com.youxu.shardingjdbcdemo;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youxu.shardingjdbcdemo.entity.Course;
+import com.youxu.shardingjdbcdemo.entity.Udict;
 import com.youxu.shardingjdbcdemo.entity.User;
 import com.youxu.shardingjdbcdemo.mapper.CourseMapper;
+import com.youxu.shardingjdbcdemo.mapper.UdictMapper;
 import com.youxu.shardingjdbcdemo.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -66,11 +68,35 @@ class ShardingJdbcDemoApplicationTests {
     private UserMapper userMapper;
     @Test
     void addUser(){
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 1; i++){
             User user = new User();
             user.setUsername("youxu");
             user.setUstatus("ok");
             userMapper.insert(user);
         }
     }
+    @Test
+    void queryUser(){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",481950965855944705L);
+        System.out.println(userMapper.selectOne(queryWrapper));
+    }
+
+    //====================操作公共表======================
+    @Resource
+    private UdictMapper udictMapper;
+    @Test
+    void insertUdict(){
+        Udict udict = new Udict();
+        udict.setUstatus("a");
+        udict.setUvalue("enable");
+        udictMapper.insert(udict);
+    }
+    @Test
+    void deleteUdict(){
+        QueryWrapper<Udict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dictid",481564041060286465L);
+        udictMapper.delete(queryWrapper);
+    }
+
 }
